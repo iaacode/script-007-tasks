@@ -1,4 +1,4 @@
 
-# <project name> project
+# Training project
 
-Author is <author name>.
+Author is Igor Anurov.

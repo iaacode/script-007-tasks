@@ -5,6 +5,9 @@ import shutil
 import logging
 from datetime import datetime
 
+logging.basicConfig(format='%(asctime)s %(name)s - %(levelname)s : %(message)s',
+                    level=logging.INFO, filename='mylog.log')
+
 
 def _name_is_invalid(path: str):
     return bool(re.search(r'(^|[\\/])\.\.($|[\\/])', path))
@@ -36,6 +39,7 @@ def change_dir(path: str, autocreate: bool = True) -> None:
             raise RuntimeError(f'The directory {path} does not exist')
 
     os.chdir(path)
+    logging.info(f'Directory was changed to {path}')
 
 
 def get_files() -> list:
@@ -132,6 +136,8 @@ def create_file(filename: str, content: str = None) -> dict:
         'size': os.path.getsize(filepath)
     }
 
+    logging.info(f'File/directory {filename} was created')
+
 
 def delete_file(filename: str) -> None:
     """Delete file.
@@ -157,3 +163,4 @@ def delete_file(filename: str) -> None:
     else:
         shutil.rmtree(filepath)
 
+    logging.info(f'File/directory {filename} was deleted')

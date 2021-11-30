@@ -1,3 +1,4 @@
+import configparser
 import os
 import os.path
 import re
@@ -5,8 +6,12 @@ import shutil
 import logging
 from datetime import datetime
 
-logging.basicConfig(format='%(asctime)s %(name)s - %(levelname)s : %(message)s',
-                    level=logging.INFO, filename='mylog.log')
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+logging.basicConfig(format=config['default'].get('log_format', raw=True),
+                    level=logging.INFO, filename=config['default'].get('log_file'))
 
 
 def _name_is_invalid(path: str):
@@ -129,6 +134,8 @@ def create_file(filename: str, content: str = None) -> dict:
         with open(filepath, "w") as file:
             if content:
                 file.write(content)
+
+    logging.info(f'File/directory {filename} was created')
     return {
         'name': filename,
         'content': content,
@@ -136,7 +143,7 @@ def create_file(filename: str, content: str = None) -> dict:
         'size': os.path.getsize(filepath)
     }
 
-    logging.info(f'File/directory {filename} was created')
+
 
 
 def delete_file(filename: str) -> None:
